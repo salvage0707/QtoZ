@@ -7,6 +7,10 @@ import Rails from "@rails/ujs"
 import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
 import "channels"
+// 以下追加
+import '../css/tailwind.css';
+import 'jquery'
+
 
 Rails.start()
 Turbolinks.start()
