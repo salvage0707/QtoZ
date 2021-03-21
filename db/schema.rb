@@ -10,10 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_16_091323) do
+ActiveRecord::Schema.define(version: 2021_03_21_035851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "articles", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "slag", null: false
+    t.string "emoji", null: false
+    t.string "category", null: false
+    t.string "topics", null: false
+    t.boolean "published", default: true, null: false
+    t.string "qiita_uid", null: false
+    t.string "qiita_url", null: false
+    t.datetime "qiita_created_at", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_articles_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "username", default: "", null: false

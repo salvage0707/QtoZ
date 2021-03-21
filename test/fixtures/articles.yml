@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  slag: MyString
+  emoji: MyString
+  category: MyString
+  topics: MyString
+  published: false
+  qiita_uid: MyString
+  qiita_url: MyString
+  qiita_created_at: 2021-03-21 12:58:51
+
+two:
+  title: MyString
+  slag: MyString
+  emoji: MyString
+  category: MyString
+  topics: MyString
+  published: false
+  qiita_uid: MyString
+  qiita_url: MyString
+  qiita_created_at: 2021-03-21 12:58:51
