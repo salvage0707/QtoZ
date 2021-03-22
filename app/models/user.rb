@@ -15,4 +15,5 @@ class User < ApplicationRecord
       user.access_token = auth.credentials.token
     end
   end
+
 end
