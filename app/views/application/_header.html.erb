@@ -11,21 +11,19 @@
         <% if user_signed_in? %>
           <div class="hidden md:block">
             <div class="ml-10 flex items-baseline space-x-4">
-              <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-              <%= link_to '記事設定', zenn_articles_path, class: "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" %>
-              <%
-=begin%>
- <a href="#" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">記事設定</a> 
-<%
-=end%>
+              <!-- クラス名を定義 -->
+              <% selected_class = "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" %>
+              <% not_selected_class = "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
 
+              <!-- 記事設定 -->
+              <% link_class_name = selected_path(articles_path, selected_class, not_selected_class)  %>
+              <%= link_to '記事設定', articles_path, class: link_class_name %>
+
+              <% bg_gray_darkness = selected_path("", "300", "900")  %>
               <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Team</a>
 
+              <% bg_gray_darkness = selected_path("", "300", "900")  %>
               <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Projects</a>
-
-              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Calendar</a>
-
-              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Reports</a>
             </div>
           </div>
         <% end %>

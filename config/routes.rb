@@ -7,4 +7,6 @@ Rails.application.routes.draw do
     get    '/users/sign_up',  to: 'home#index',              as: :new_user_registration
     delete '/users/sign_out', to: 'devise/sessions#destroy', as: :destroy_user_session
   end
+
+  resources :articles, only: [:index, :new, :create, :destroy]
 end
