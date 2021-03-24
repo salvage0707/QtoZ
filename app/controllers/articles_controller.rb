@@ -11,7 +11,7 @@ class ArticlesController < ApplicationController
     end
 
     # レスポンスを早くするため非同期でインポート処理
-    async_import_qiita_articles(current_user.id, current_user.access_token, params[:emoji])
+    async_import_qiita_articles(current_user, current_user.access_token, params[:emoji])
 
     redirect_to articles_path
   end
@@ -28,8 +28,8 @@ class ArticlesController < ApplicationController
 
   private 
     
-    def async_import_qiita_articles(user_id, access_token, default_emoji)
-      Thread.new(user_id, access_token, default_emoji) do |user_id, access_token, default_emoji|
+    def async_import_qiita_articles(user, access_token, default_emoji)
+      Thread.new(user, access_token, default_emoji) do |user, access_token, default_emoji|
         articles = []
         client = Qiita::Client.new(access_token: current_user.access_token)
 
@@ -45,7 +45,7 @@ class ArticlesController < ApplicationController
         (1..max_page).each do |page|
           params = {page: page}
           response = client.list_authenticated_user_items(params)
-          Article.import_from_qiita_response(user_id, default_emoji, response)
+          Article.import_from_qiita_response(user, default_emoji, response)
         end
       end
     end

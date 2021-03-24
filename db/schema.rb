@@ -25,6 +25,8 @@ ActiveRecord::Schema.define(version: 2021_03_21_035851) do
     t.string "qiita_uid", null: false
     t.string "qiita_url", null: false
     t.datetime "qiita_created_at", null: false
+    t.string "bucket_name"
+    t.string "filepath"
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

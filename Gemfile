@@ -36,6 +36,10 @@ gem 'qiita'
 
 gem 'activerecord-import'
 
+gem 'google-cloud-storage'
+
+gem 'config'
+
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 

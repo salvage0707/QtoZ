@@ -1,0 +1,3 @@
+storage:
+  keyfile: "tmp/keys/service-acount.json"
+  bucket: "example-storage-97294"
