@@ -23,7 +23,7 @@ class ArticlesController < ApplicationController
     data = {
       username: current_user.username
     }
-    response = Faraday.post(url, data.to_json(), Content-Type: "application/json")
+    response = Faraday.post(url, data.to_json(), "Content-Type" => "application/json")
     render json: response.body
   end
 

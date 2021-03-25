@@ -15,6 +15,10 @@
               <% selected_class = "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" %>
               <% not_selected_class = "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
 
+              <!-- 記事のインポート -->
+              <% link_class_name = selected_path(new_article_path, selected_class, not_selected_class)  %>
+              <%= link_to 'インポート', new_article_path, class: link_class_name %>
+
               <!-- 記事設定 -->
               <% link_class_name = selected_path(articles_path, selected_class, not_selected_class)  %>
               <%= link_to '記事設定', articles_path, class: link_class_name %>
