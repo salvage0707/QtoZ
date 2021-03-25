@@ -370,6 +370,7 @@ DEPENDENCIES
   devise
   dotenv-rails
   google-cloud-storage
+  httpclient
   jbuilder (~> 2.7)
   listen (~> 3.3)
   omniauth (= 1.9.1)

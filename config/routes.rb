@@ -9,4 +9,5 @@ Rails.application.routes.draw do
   end
 
   resources :articles, only: [:index, :new, :create, :destroy]
+  get 'articles/zip', to: 'articles#zip', as: :articles_zip
 end

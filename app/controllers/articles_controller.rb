@@ -1,3 +1,5 @@
+require 'httpclient'
+
 class ArticlesController < ApplicationController
   before_action :authenticate_user!
 
@@ -14,6 +16,15 @@ class ArticlesController < ApplicationController
     async_import_qiita_articles(current_user, current_user.access_token, params[:emoji])
 
     redirect_to articles_path
+  end
+
+  def zip
+    url = ENV['GCF_ZIP_URL']  # URLを設定
+    data = {
+      username: current_user.username
+    }
+    response = Faraday.post(url, data.to_json(), Content-Type: "application/json")
+    render json: response.body
   end
 
   def index

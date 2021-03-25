@@ -40,6 +40,8 @@ gem 'google-cloud-storage'
 
 gem 'config'
 
+gem 'httpclient'
+
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
