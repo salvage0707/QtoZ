@@ -10,9 +10,7 @@ class CreateArticles < ActiveRecord::Migration[6.1]
       t.string :qiita_uid,          null: false
       t.string :qiita_url,          null: false
       t.datetime :qiita_created_at, null: false
-
-      t.string :bucket_name
-      t.string :filepath
+      t.text :body,                 null: false
 
       t.references :user, null:false
 

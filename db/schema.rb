@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_21_035851) do
+ActiveRecord::Schema.define(version: 2021_04_08_134250) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,12 +25,19 @@ ActiveRecord::Schema.define(version: 2021_03_21_035851) do
     t.string "qiita_uid", null: false
     t.string "qiita_url", null: false
     t.datetime "qiita_created_at", null: false
-    t.string "bucket_name"
-    t.string "filepath"
+    t.text "body", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_articles_on_user_id"
+  end
+
+  create_table "import_jobs", force: :cascade do |t|
+    t.string "status"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_import_jobs_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -49,4 +56,14 @@ ActiveRecord::Schema.define(version: 2021_03_21_035851) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  create_table "zip_jobs", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "status", null: false
+    t.string "url"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_zip_jobs_on_user_id"
+  end
+
+  add_foreign_key "import_jobs", "users"
 end

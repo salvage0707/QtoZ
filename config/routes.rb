@@ -9,5 +9,7 @@ Rails.application.routes.draw do
   end
 
   resources :articles, only: [:index, :new, :create, :destroy]
-  get 'articles/zip', to: 'articles#zip', as: :articles_zip
+
+  get  'zip/jobs', to: 'zip#index',  as: :zip_jobs
+  post 'zip/jobs', to: 'zip#create'
 end

@@ -1,0 +1,50 @@
+<%= javascript_pack_tag 'articles/index' %>
+
+<div class="overflow-x-auto">
+  <div class="min-w-screen min-h-screen bg-gray-100 flex items-center justify-center bg-gray-100 font-sans ">
+    <div class="w-full lg:w-5/6 overflow-x-scroll">
+      <div class="bg-white shadow-md rounded my-6">
+        <div>
+          <%= link_to "実行", zip_jobs_path, method: :post %>
+        </div>
+
+        <table class="w-full table-auto">
+          <thead>
+            <tr class="text-center bg-gray-200 text-gray-600 text-sm leading-normal">
+              <th class="py-3 px-6">実行日</th>
+              <th class="py-3 px-6">ステータス</th>
+              <th class="py-3 px-6">ダウンロード</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-600 text-sm font-light">
+            <% @jobs.each do |job| %>
+              <tr class="border-b text-center border-gray-200 hover:bg-gray-100">
+                <td class="py-3 px-6 whitespace-nowrap">
+                    <span class="font-medium"><%= job.created_at.to_s() %></span>
+                </td>
+
+                <td class="py-3 px-6 text-center">
+                  <span class="py-1 px-3 rounded-full text-xs"><%= job.status %></span>
+                </td>
+
+                <td class="py-3 px-6 text-center">
+                  <div class="flex item-center justify-center">
+                    <% if job.isSuccess?  %>
+                      <a class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110" rel="noopener noreferrer" target="_blank" href="<%= job.url %>">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                      </a>
+                    <% else %>
+                      <span>-</span>
+                    <% end %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

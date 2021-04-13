@@ -23,11 +23,10 @@
               <% link_class_name = selected_path(articles_path, selected_class, not_selected_class)  %>
               <%= link_to '記事設定', articles_path, class: link_class_name %>
 
-              <% bg_gray_darkness = selected_path("", "300", "900")  %>
-              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Team</a>
+              <!-- ダウンロード -->
+              <% link_class_name = selected_path(zip_jobs_path, selected_class, not_selected_class)  %>
+              <%= link_to 'ダウンロード', zip_jobs_path, class: link_class_name %>
 
-              <% bg_gray_darkness = selected_path("", "300", "900")  %>
-              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Projects</a>
             </div>
           </div>
         <% end %>
