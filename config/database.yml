@@ -85,6 +85,9 @@ test:
 #
 production:
   <<: *default
-  database: QtoZ_production
-  username: QtoZ
-  password: <%= ENV['QTOZ_DATABASE_PASSWORD'] %>
+  pool: 5
+  timeout: 5000
+  username: <%= ENV.fetch("DATABASE_USER") {""} %>
+  password: <%= ENV.fetch("DATABASE_PASSWORD") {""} %>
+  database: "qtoz_production"
+  host:     <%= ENV.fetch("DATABASE_HOST") {""} %>

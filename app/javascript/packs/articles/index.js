@@ -1,1 +1,1 @@
-import '../../css/zenn_articles/index.css';
+import '../../css/articles/index.css';
