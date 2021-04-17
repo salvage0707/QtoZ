@@ -87,7 +87,7 @@ production:
   <<: *default
   pool: 5
   timeout: 5000
-  username: <%= ENV.fetch("DATABASE_USER") {""} %>
-  password: <%= ENV.fetch("DATABASE_PASSWORD") {""} %>
-  database: "qtoz_production"
-  host:     <%= ENV.fetch("DATABASE_HOST") {""} %>
+  username: <%= ENV["DB_USER"] %>
+  password: <%= ENV["DB_PASS"] %>
+  database: <%= ENV["DB_NAME"] %>
+  host:  "<%= ENV.fetch("DB_SOCKET_DIR") { '/cloudsql' } %>/<%= ENV["INSTANCE_CONNECTION_NAME"] %>"
