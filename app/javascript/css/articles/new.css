@@ -1,0 +1,11 @@
+.gradient {
+    background: linear-gradient(90deg, #55c500, 10%, #e6f2ff);
+}
+
+.emoji {
+    display: inline;
+}
+
+.emoji-input-form {
+    width: 150px;
+}

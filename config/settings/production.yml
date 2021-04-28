@@ -1,2 +1,2 @@
 storage:
-  keyfile: ENV['GOOGLE_CONFIDENTIAL_PATH']
+  bucket: "example-storage-97294"

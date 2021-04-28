@@ -4,3 +4,4 @@
 .gitignore
 
 !/public/assets
+!/public/packs
