@@ -1,4 +1,4 @@
-<% content_for :scripts do %>
+<%= content_for :scripts do %>
   <%= javascript_pack_tag 'articles/new' %>
 <% end %>
 
@@ -37,12 +37,14 @@
       デフォルトの絵文字を設定してActionボタンを押してください！
     </h3>
     <%= form_tag articles_path do %>
-      <div class="emoji-input-form mx-auto">
-         <textarea id="emoji" type="text" name="emoji"></textarea>
-      </div>
-     
+      <input  
+        class="block mx-auto w-100 text-center shadow appearance-none border rounded py-4 px-2 text-gray-900 leading-tight focus:outline-none focus:shadow-outline" 
+        id="emoji" 
+        type="text"
+        name="emoji"
+        placeholder="絵文字を1つ入力してください"/>
       <button type="submit" class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
-        Action
+        インポート
       </button>
     <% end %>
   </section>
