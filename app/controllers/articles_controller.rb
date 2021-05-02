@@ -8,6 +8,15 @@ class ArticlesController < ApplicationController
   end
 
   def create
+    # 絵文字チェック
+    article = Article.new(emoji: params[:emoji])
+    article.invalid?
+    if article.errors[:emoji].length > 0
+      flash.now[:alert] = article.errors[:emoji][0]
+      render 'new'
+      return 
+    end
+
     # 記事を全削除
     ActiveRecord::Base.transaction do
       current_user.articles.destroy_all
@@ -21,8 +30,10 @@ class ArticlesController < ApplicationController
 
   def index
     job = ImportJob.latest(current_user.id)
-    p job.status
-    redirect_to action: :new unless job.isSuccess?
+    unless job.isSuccess?
+      flash[:notice] = "インポート中です。再度記事設定ページにアクセスしてください。"
+      redirect_to action: :new 
+    end
 
     @articles = current_user.articles
   end

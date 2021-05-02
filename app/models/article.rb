@@ -1,4 +1,6 @@
 class Article < ApplicationRecord
+  validates :emoji, format: { with: /\A\p{Emoji}{1}\z/, message: "絵文字を1文字入力してください" }
+
   belongs_to :user
 
   MAX_IMPORT = 100

@@ -1,0 +1,9 @@
+<% flash.each do |name, msg| %>
+  <% coler_name = flash_name_to_coler_name(name) %>
+  <%= content_tag :div, class: "text-center bg-#{coler_name}-100 border border-#{coler_name}-400 text-#{coler_name}-700 px-4 py-3 rounded relative" do %>
+    <span class="block sm:inline"><%= msg %></span>
+  <% end %>
+<% end -%>
+
+
+
