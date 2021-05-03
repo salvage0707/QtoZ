@@ -8,6 +8,12 @@ class User < ApplicationRecord
   has_many :articles
   has_many :zip_jobs
 
+  validates :username,     presence: true, uniqueness: true
+  validates :provider,     presence: true
+  validates :access_token, presence: true
+  validates :uid,          presence: true
+  validates :password,     presence: true
+
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
       user.username = auth.info.nickname
