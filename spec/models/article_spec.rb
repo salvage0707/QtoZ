@@ -1,176 +1,159 @@
 require 'rails_helper'
-require 'support/model/validation_helper'
 
 RSpec.describe Article, type: :model do
   describe 'Validation チェック' do
-    let(:target) { build(:article) }
-
-    subject {
-      target.valid?
-      target.errors[attribute]
-    }
+    let(:target) { build(:article, user: create(:user)) }
 
     describe 'タイトル(title)' do
-      let(:attribute) { :title }
-
       it '空の値が無効であること' do
-        target[attribute] = nil
-        is_expected.to include('を入力してください')
+        target.title = nil
+        expect(target).to_not be_valid
       end
     end
 
     describe 'スラッグ(slag)' do
-      let(:attribute) { :slag }
-
       it '空の値が無効であること' do
-        target[attribute] = nil
-        is_expected.to include('を入力してください')
+        target.slag = nil
+        expect(target).to_not be_valid
       end
 
       context '文字列長チェック(12~50)' do
 
         it '35文字（範囲内）が有効であること' do
-          target[attribute] = "a" * 35
-          is_expected.to_not include('は50文字以内で入力してください')
-          is_expected.to_not include('は12文字以上で入力してください')
+          target.slag = "a" * 35
+          expect(target).to be_valid
         end
 
         it '11文字が無効であること' do
-          target[attribute] = "a" * 11
-          is_expected.to include('は12文字以上で入力してください')
+          target.slag = "a" * 11
+          expect(target).to_not be_valid
         end
 
         it '12文字が有効であること' do
-          target[attribute] = "a" * 12
-          is_expected.to_not include('は50文字以内で入力してください')
-          is_expected.to_not include('は12文字以上で入力してください')
+          target.slag = "a" * 12
+          expect(target).to be_valid
         end
 
         it '50文字が有効であること' do
-          target[attribute] = "a" * 50
-          is_expected.to_not include('は50文字以内で入力してください')
-          is_expected.to_not include('は12文字以上で入力してください')
+          target.slag = "a" * 50
+          expect(target).to be_valid
         end
 
         it '51文字が無効であること' do
-          target[attribute] = "a" * 51
-          is_expected.to include('は50文字以内で入力してください')
+          target.slag = "a" * 51
+          expect(target).to_not be_valid
         end
       end
 
       describe 'パターンチェック(半角英数字、ハイフン)' do
         it '半角英字だけの値が有効であること' do
-          target[attribute] = ('a'..'z').to_a.join()
-          is_expected.to_not include('は"a-z0-9"と"-"の組み合わせで入力してください')
+          target.slag = ('a'..'z').to_a.join()
+          expect(target).to be_valid
         end
 
         it '半角数字だけの値が有効であること' do
-          target[attribute] = ('0'..'9').to_a.join()
-          is_expected.to_not include('は"a-z0-9"と"-"の組み合わせで入力してください')
+          target.slag = ('0'..'12').to_a.join()
+          expect(target).to be_valid
         end
 
         it 'ハイフンだけの値が有効であること' do
-          target[attribute] = '-'
-          is_expected.to_not include('は"a-z0-9"と"-"の組み合わせで入力してください')
+          target.slag = '-'
+          expect(target).to_not be_valid
         end
 
         it '許容される全てのパターンを含む値が有効であること' do
-          target[attribute] = [*'a'..'z', *'0'..'9', '-'].join()
-          is_expected.to_not include('は"a-z0-9"と"-"の組み合わせで入力してください')
+          target.slag = [*'a'..'z', *'0'..'9', '-'].join()
+          expect(target).to be_valid
         end
 
         it '半角大文字英字を含む値が無効であること' do
-          target[attribute] = ('A'..'Z').to_a.join()
-          is_expected.to include('は"a-z0-9"と"-"の組み合わせで入力してください')
+          target.slag = ('A'..'Z').to_a.join()
+          expect(target).to_not be_valid
         end
 
         it '許容されない記号を含む値が無効であること' do
-          target[attribute] = '@;:[]_/.,<>?}{*+~=-^¥|!#$%&()'
-          is_expected.to include('は"a-z0-9"と"-"の組み合わせで入力してください')
+          target.slag = '@;:[]_/.,<>?}{*+~=-^¥|!#$%&()'
+          expect(target).to_not be_valid
         end
       end
 
       context '一意性チェック' do
         it '重複しない値が有効であること' do
           other = create(:article)
-          is_expected.to_not include('はすでに存在します')
+          expect(target).to be_valid
         end
 
         it '重複した値が無効であること' do
           other = create(:article)
           target.user = other.user
           target.slag = other.slag
-          is_expected.to include('はすでに存在します')
+          expect(target).to_not be_valid
         end
       end
     end
 
     describe '絵文字(emoji)' do
-      let(:attribute) { :emoji }
-
       it '空の値が無効であること' do
-        target[attribute] = nil
-        is_expected.to include('を入力してください')
+        target.emoji = nil
+        expect(target).to_not be_valid
       end
 
       context '文字列長チェック(1文字)' do
         it '0文字が無効であること' do
-          target[attribute] = ''
-          is_expected.to include('は1文字で入力してください')
+          target.emoji = ''
+          expect(target).to_not be_valid
         end
 
         it '1文字が有効であること' do
-          target[attribute] = '✊'
-          is_expected.to_not include('は1文字で入力してください')
+          target.emoji = '✊'
+          expect(target).to be_valid
         end
 
         it '2文字が無効であること' do
-          target[attribute] = '✊✊'
-          is_expected.to include('は1文字で入力してください')
+          target.emoji = '✊✊'
+          expect(target).to_not be_valid
         end
       end
 
       context 'パターンチェック(絵文字)' do
         it '絵文字が有効であること' do
-          target[attribute] = '✊'
-          is_expected.to_not include('は絵文字で入力してください')
+          target.emoji = '✊'
+          expect(target).to be_valid
         end
 
         it '半角英字が無効であること' do
-          target[attribute] = ('a'..'z').to_a.join()
-          is_expected.to include('は絵文字で入力してください')
+          target.emoji = 'A'
+          expect(target).to_not be_valid
         end
 
         it '大文字半角英字が無効であること' do
-          target[attribute] = ('A'..'Z').to_a.join()
-          is_expected.to include('は絵文字で入力してください')
+          target.emoji = 'A'
+          expect(target).to_not be_valid
         end
 
         it '数字が無効であること' do
           pending('p{Emoji}の正規表現が数字を許容しているため失敗する see: https://monmon.hateblo.jp/entry/2019/10/03/132951')
-          target[attribute] = ('0'..'9').to_a.join()
-          is_expected.to include('は絵文字で入力してください')
+          target.emoji = 7
+          expect(target).to_not be_valid
         end
 
         it '記号が無効であること' do
           pending('p{Emoji}の正規表現が一部記号を許容しているため失敗する。 see: https://monmon.hateblo.jp/entry/2019/10/03/132951')
-          target[attribute] = '*'
-          is_expected.to include('は絵文字で入力してください')
+          target.emoji = '*'
+          expect(target).to_not be_valid
         end
 
         it '日本語が無効であること' do
-          target[attribute] = ('あ'..'ん').to_a.join()
-          is_expected.to include('は絵文字で入力してください')
+          target.emoji = 'あ'
+          expect(target).to_not be_valid
         end
       end
     end
 
     describe 'Zennタイプ(category)' do
-      let(:attribute) { :category }
-
       it '空の値が無効であること' do
-        target[attribute] = nil
-        is_expected.to include('を入力してください')
+        target.category = nil
+        expect(target).to_not be_valid
       end
 
       it 'デフォルト値が"tech"であること' do
@@ -181,35 +164,33 @@ RSpec.describe Article, type: :model do
       
       context 'パターンチェック("tech" or "idea")' do
         it 'techの文字列が有効であること' do
-          target[attribute] = 'tech'
-          is_expected.to_not include('は一覧にありません')
+          target.category = 'tech'
+          expect(target).to be_valid
         end
 
         it 'ideaの文字列が有効であること' do
-          target[attribute] = 'idea'
-          is_expected.to_not include('は一覧にありません')
+          target.category = 'idea'
+          expect(target).to be_valid
         end
 
         it 'techを含む文字列が無効であること' do
-          target[attribute] = 'techhoge'
-          is_expected.to include('は一覧にありません')
+          target.category = 'techhoge'
+          expect(target).to_not be_valid
         end
 
         it 'ideaを含む文字列が無効であること' do
-          target[attribute] = 'ideahoge'
-          is_expected.to include('は一覧にありません')
+          target.category = 'ideahoge'
+          expect(target).to_not be_valid
         end
 
         it '適当な文字列が無効であること' do
-          target[attribute] = 'ajksdhfkasei'
-          is_expected.to include('は一覧にありません')
+          target.category = 'ajksdhfkasei'
+          expect(target).to_not be_valid
         end
       end 
     end
 
     describe '公開設定published' do
-      let(:attribute) { :published }
-
       it 'デフォルト値が"true"であること' do
         target = Article.new
         expect(target.published).to eq true
@@ -217,51 +198,45 @@ RSpec.describe Article, type: :model do
 
       context 'パターンチェック(true or false)' do 
         it '真偽値trueが有効であること' do
-          target[attribute] = true
-          is_expected.to_not include('は一覧にありません')
+          target.published = true
+          expect(target).to be_valid
         end
 
         it '真偽値falseが有効であること' do
-          target[attribute] = false
-          is_expected.to_not include('は一覧にありません')
+          target.published = false
+          expect(target).to be_valid
         end
 
         it 'trueと評価される真偽値以外の値が有効であること' do
-          target[attribute] = 1
-          is_expected.to_not include('は一覧にありません')
+          target.published = 1
+          expect(target).to be_valid
         end
 
         it 'falseと評価される真偽値以外の値が無効であること' do
-          target[attribute] = nil
-          is_expected.to include('は一覧にありません')
+          target.published = nil
+          expect(target).to_not be_valid
         end
       end
     end
 
     describe 'Qiita 記事ID(qiita_uid)' do
-      let(:attribute) { :qiita_uid }
-
       it '空の値が無効であること' do
-        target[attribute] = nil
-        is_expected.to include('を入力してください')
+        target.qiita_uid = nil
+        expect(target).to_not be_valid
       end
     end
 
     describe 'Qiita 記事URL(qiita_url)' do
-      let(:attribute) { :qiita_url }
-
       it '空の値が無効であること' do
-        target[attribute] = nil
-        is_expected.to include('を入力してください')
+        target.qiita_url = nil
+        expect(target).to_not be_valid
       end
     end
 
     describe 'Qiita 記事作成時間(qiita_created_at)' do
-      let(:attribute) { :qiita_created_at }
-
       it '空の値が無効であること' do
-        target[attribute] = nil
-        is_expected.to include('を入力してください')
+        target.qiita_created_at = nil
+        expect(target).to_not be_valid
       end
     end
 
@@ -269,17 +244,15 @@ RSpec.describe Article, type: :model do
       let(:attribute) { :body }
 
       it '空の値が有効であること' do
-        target[attribute] = nil
-        is_expected.to_not include('を入力してください')
+        target.body = nil
+        expect(target).to be_valid
       end
     end
 
     describe '作成ユーザーID(user_id)' do
-      let(:attribute) { :user_id }
-
       it '空の値が無効であること' do
-        target[attribute] = nil
-        is_expected.to include('を入力してください')
+        target.user_id = nil
+        expect(target).to_not be_valid
       end
     end
 
