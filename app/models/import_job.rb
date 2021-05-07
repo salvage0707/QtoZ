@@ -1,6 +1,9 @@
 class ImportJob < ApplicationRecord
   belongs_to :user
 
+  validates :status, presence: true, 
+                     inclusion: { in: %w(実行中 完了 失敗)}
+
   scope :latest, -> (user_id) { where(user_id: user_id).order(id: :desc).first }
 
   RUNNITG = "実行中"

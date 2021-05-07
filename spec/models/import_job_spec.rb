@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe ZipJob, type: :model do
+RSpec.describe ImportJob, type: :model do
   describe 'Validation チェック' do
-    let(:target) { build(:zip_job, user: create(:user)) }
+    let(:target) { build(:import_job, user: create(:user)) }
 
     describe 'ステータス(status)' do
       it '空の値が無効であること' do
@@ -36,13 +36,6 @@ RSpec.describe ZipJob, type: :model do
     describe 'ユーザー(user_id)' do
       it '空の値が無効であること' do
         target.user = nil
-        expect(target).to_not be_valid
-      end
-    end
-
-    describe 'ダウンロードurl(url)' do
-      it '空の値が無効であること' do
-        target.url = nil
         expect(target).to_not be_valid
       end
     end
