@@ -1,8 +1,21 @@
 class Article < ApplicationRecord
   belongs_to :user
 
-  validates :emoji, format: { with: /\A\p{Emoji}{1}\z/, message: "絵文字を1文字入力してください" }
-  validates :slag,  uniquness: { scope: [:user_id]  }
+  validates :title, presence: true
+  validates :emoji, presence: true,
+                    format: { with: /\A\p{Emoji}+\z/, message: "は絵文字で入力してください" },
+                    length: { is: 1 }
+  validates :slag,  presence: true, 
+                    format: { with: /\A[a-z0-9¥-]+\z/, message: 'は"a-z0-9"と"-"の組み合わせで入力してください' },
+                    length: { in: 12..50 },
+                    uniqueness: { scope: :user_id  }
+  validates :category,  presence: true,
+                        inclusion: { in: %w(tech idea)}
+  validates :published, inclusion: { in: [true, false] }
+  validates :qiita_uid, presence: true
+  validates :qiita_url, presence: true
+  validates :qiita_created_at, presence: true
+  validates :user_id,          presence: true
 
   MAX_IMPORT = 100
 

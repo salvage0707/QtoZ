@@ -6,12 +6,6 @@ RSpec.describe User, type: :model do
       @user = create(:user)
     end
 
-    context '全ての値が入っている場合' do
-      it '有効であること' do 
-        expect(@user).to be_valid 
-      end
-    end
-
     context 'ユーザー名(username)' do
       it '空の値が無効であること' do
         @user.username = nil

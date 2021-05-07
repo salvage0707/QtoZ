@@ -64,4 +64,7 @@ RSpec.configure do |config|
 
   # Factory Bot Rails
   config.include FactoryBot::Syntax::Methods
+
+  # ヘルパーメソッド郡
+  Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 end
