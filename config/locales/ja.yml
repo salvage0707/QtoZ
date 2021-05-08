@@ -1,0 +1,8 @@
+ja:
+  devise:
+    omniauth_callbacks:
+      user:
+        success: "ログインしました"
+    sessions:
+      user:
+        signed_out: "ログアウトしました"

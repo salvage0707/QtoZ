@@ -11,10 +11,10 @@ class ArticlesController < ApplicationController
     # 絵文字チェック
     article = Article.new(emoji: params[:emoji])
     article.invalid?
-    if article.errors[:emoji].length > 0
-      flash.now[:alert] = article.errors[:emoji][0]
+    if article.errors[:emoji].any?
+      flash.now[:alert] = "絵文字1文字を入力してください"
       render 'new'
-      return 
+      return
     end
 
     # 記事を全削除
