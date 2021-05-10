@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     delete '/users/sign_out', to: 'devise/sessions#destroy', as: :destroy_user_session
   end
 
-  resources :articles, only: [:index, :new, :create, :destroy]
+  resources :articles, only: [:index, :new, :create, :destroy, :update]
 
   get  'zip/jobs', to: 'zip#index',  as: :zip_jobs
   post 'zip/jobs', to: 'zip#create'

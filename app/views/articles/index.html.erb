@@ -26,32 +26,31 @@
                 <!-- slag -->
                 <td class="py-3 px-6 text-left whitespace-nowrap">
                   <div class="slag flex items-center font-medium">
-                    <input class="slag-input hidden" name="slag" value="<%= article.slag %>">
                     <span class="slag-text font-medium "><%= article.slag %></span>
                   </div>
                 </td>
 
                 <!-- title -->
                 <td class="py-3 px-6 text-left">
-                  <input class="title-input hidden" name="title" value="<%= article.title %>">
-                  <%= article.title %>
+                  <span class="title-text font-medium "><%= article.title %></span>
                 </td>
 
                 <!-- emoji -->
                 <td class="py-3 px-6 text-center text-3xl">
-                  <%= article.emoji %>
+                  <span class="emoji-text font-medium "><%= article.emoji %></span>
                 </td>
 
-                <!-- category -->
+                <!-- type -->
                 <td class="py-3 px-6 text-center">
-                  <span class="py-1 px-3 rounded-full text-xs <%= "article-#{article.category}" %>"><%= article.category %></span>
+                  <span class="type-text py-1 px-3 rounded-full text-xs <%= "article-#{article.category}" %>"><%= article.category %></span>
                 </td>
 
                 <!-- topic -->
-                <td>
-                  <ul class="m-2">
+                <td class="py-3 px-6 text-center">
+                  <span class="topics-text hidden"><%= article.topics %></span>
+                  <ul class=" topics-list m-2">
                     <% article.topics.split(",").each do |topic| %>
-                      <li><span class="m-1 px-3 rounded-full text-xs bg-yellow-200"><%= topic.gsub('"', '') %></span></li>
+                      <li><span class="m-1 px-3 rounded-full text-xs bg-yellow-200"><%= topic %></span></li>
                     <% end %>
                   </ul> 
                 </td>
@@ -60,9 +59,9 @@
                 <td class="py-3 px-6 text-center">
                   <div class="flex items-center justify-center">
                     <% if article.published %>
-                      <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs" ><%= article.published %></span>
+                      <span class="published-text bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs" ><%= article.published %></span>
                     <% else %>
-                      <span class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs" ><%= article.published %></span>
+                      <span class="published-text bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs" ><%= article.published %></span>
                     <% end %>
                   </div>
                 </td>
@@ -76,7 +75,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                       </svg>
                     </a>
-                    <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
+                    <div class="show-update-modal w-4 mr-2 transform hover:text-purple-500 hover:scale-110"
+                         data-id="<%= article.id %>">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                       </svg>
@@ -131,8 +131,90 @@
       <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
         <a data-method="delete" class="delete-button w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
           削除
-        <a>
+        </a>
         <button type="button" class="hidden-delete-modal mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+          キャンセル
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- article update modal 参考:https://tailwindui.com/components/application-ui/overlays/modals -->
+<div id="update-modal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true" data-changed="false">
+  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="hidden-update-modal fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+    <!-- This element is to trick the browser into centering the modal contents. -->
+    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
+      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <form id="update-form">
+
+          <div class="mt-3 text-left self-center">
+            <!-- slag -->
+            <div class="mt-4">
+              <label class="text-gray-700 text-base font-bold mb-2" for="slag-input-area">
+                slag
+              </label>
+              <input name="slag" id="slag-input-area" class="mt-1 shadow text-xl appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text">
+            </div>
+
+            <!-- title -->
+            <div class="mt-4">
+              <label class="text-gray-700 text-base font-bold mb-2" for="title-input-area">
+                title
+              </label>
+              <input name="title" id="title-input-area" class="mt-1 shadow text-xl appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text">
+            </div>
+
+            <!-- emoji -->
+            <div class="mt-4 w-20">
+              <label class="text-gray-700 text-base font-bold mb-2" for="emoji-input-area">
+                emoji
+              </label>
+              <input name="emoji" id="emoji-input-area" class="mt-1 shadow text-xl align-last-center appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text">
+            </div>
+
+            <!-- type -->
+            <div class="mt-4 w-20">
+              <label class="text-gray-700 text-base font-bold mb-2" for="type-input-area">
+                type
+              </label>
+              <select name="type" id="type-input-area" class="mt-1 shadow text-xl align-last-center border rounded appearance-none w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <option value="tech">tech</option>
+                <option value="idea">idea</option>
+              </select>
+            </div>
+
+            <!-- topics -->
+            <div class="mt-4">
+              <label class="text-gray-700 text-base font-bold mb-2" for="topics-input-area">
+                topics
+              </label>
+              <input name="topics" id="topics-input-area" class="mt-1 shadow text-xl appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text">
+            </div>
+
+            <!-- published -->
+            <div class="mt-4 w-20">
+              <label class="text-gray-700 text-base font-bold mb-2" for="published-input-area">
+                published
+              </label>
+              <select name="published" id="published-input-area" class="mt-1 shadow text-xl align-last-center border rounded appearance-none w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <option value="true">true</option>
+                <option value="false">false</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+        <button class="update-button w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+          更新
+        </button>
+        <button type="button" class="hidden-update-modal mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
           キャンセル
         </button>
       </div>

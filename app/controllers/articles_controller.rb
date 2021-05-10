@@ -8,15 +8,6 @@ class ArticlesController < ApplicationController
   end
 
   def create
-    # 絵文字チェック
-    article = Article.new(emoji: params[:emoji])
-    article.invalid?
-    if article.errors[:emoji].any?
-      flash.now[:alert] = "絵文字1文字を入力してください"
-      render 'new'
-      return
-    end
-
     # 記事を全削除
     ActiveRecord::Base.transaction do
       current_user.articles.destroy_all
@@ -36,6 +27,22 @@ class ArticlesController < ApplicationController
     end
 
     @articles = current_user.articles
+  end
+
+  def update
+    article = Article.find(params[:id])
+    article.slag  = params[:slag]
+    article.title = params[:title]
+    article.emoji = params[:emoji]
+    article.category  = params[:type]
+    article.topics    = params[:topics]
+    article.published = params[:published]
+
+    if article.save
+      head :no_content
+    else
+      render json: article.errors, status: :bad_request
+    end
   end
 
   def destroy
@@ -69,7 +76,9 @@ class ArticlesController < ApplicationController
             (1..max_page).each do |page|
               params = {page: page}
               response = client.list_authenticated_user_items(params)
-              Article.import_from_qiita_response(user, default_emoji, response)
+              response.body.each do |data|
+                Article.import_from_qiita_response(user, default_emoji, data)
+              end
             end
           end
 

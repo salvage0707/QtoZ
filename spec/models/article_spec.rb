@@ -97,57 +97,6 @@ RSpec.describe Article, type: :model do
         target.emoji = nil
         expect(target).to_not be_valid
       end
-
-      context '文字列長チェック(1文字)' do
-        it '0文字が無効であること' do
-          target.emoji = ''
-          expect(target).to_not be_valid
-        end
-
-        it '1文字が有効であること' do
-          target.emoji = '✊'
-          expect(target).to be_valid
-        end
-
-        it '2文字が無効であること' do
-          target.emoji = '✊✊'
-          expect(target).to_not be_valid
-        end
-      end
-
-      context 'パターンチェック(絵文字)' do
-        it '絵文字が有効であること' do
-          target.emoji = '✊'
-          expect(target).to be_valid
-        end
-
-        it '半角英字が無効であること' do
-          target.emoji = 'A'
-          expect(target).to_not be_valid
-        end
-
-        it '大文字半角英字が無効であること' do
-          target.emoji = 'A'
-          expect(target).to_not be_valid
-        end
-
-        it '数字が無効であること' do
-          pending('p{Emoji}の正規表現が数字を許容しているため失敗する see: https://monmon.hateblo.jp/entry/2019/10/03/132951')
-          target.emoji = 7
-          expect(target).to_not be_valid
-        end
-
-        it '記号が無効であること' do
-          pending('p{Emoji}の正規表現が一部記号を許容しているため失敗する。 see: https://monmon.hateblo.jp/entry/2019/10/03/132951')
-          target.emoji = '*'
-          expect(target).to_not be_valid
-        end
-
-        it '日本語が無効であること' do
-          target.emoji = 'あ'
-          expect(target).to_not be_valid
-        end
-      end
     end
 
     describe 'Zennタイプ(category)' do
@@ -186,6 +135,37 @@ RSpec.describe Article, type: :model do
         it '適当な文字列が無効であること' do
           target.category = 'ajksdhfkasei'
           expect(target).to_not be_valid
+        end
+      end 
+    end
+
+    describe 'トピックス(topics)' do
+      it '空の値が無効であること' do
+        target.category = nil
+        expect(target).to_not be_valid
+      end
+
+      context 'パターンチェック(csv形式)' do
+        context 'CSV' do
+          it '1カラムが有効であること' do
+            target.topics = 'hoge'
+            expect(target).to be_valid
+          end
+
+          it '複数カラムが有効であること' do
+            target.topics = 'hoge,foo,bar'
+            expect(target).to be_valid
+          end
+
+          it '文字の間に空白ありが有効であること' do
+            target.topics = 'hoge, f o o,bar'
+            expect(target).to be_valid
+          end
+
+          it '文字の間に空白ありが有効であること' do
+            target.topics = 'hoge, f o o,bar'
+            expect(target).to be_valid
+          end
         end
       end 
     end
@@ -255,6 +235,35 @@ RSpec.describe Article, type: :model do
         expect(target).to_not be_valid
       end
     end
+  end
 
+  describe 'save前処理' do
+    let(:target) { build(:article, user: create(:user)) }
+
+    describe 'topicsのトリム処理' do
+      it '空白を含まないcsv文字列がそのままの状態で保存されること' do
+        target.topics = "hoge,foo,bar"
+        target.save
+        expect(target.topics).to eq "hoge,foo,bar"
+      end
+
+      it '空白を各カラムの前後に含むcsv文字列がトリムされた状態で保存されること' do
+        target.topics = " hoge , foo , bar "
+        target.save
+        expect(target.topics).to eq "hoge,foo,bar"
+      end
+
+      it '空白を各カラムの前後に複数の空白を含むcsv文字列がトリムされた状態で保存されること' do
+        target.topics = "  hoge  ,  foo  ,  bar  "
+        target.save
+        expect(target.topics).to eq "hoge,foo,bar"
+      end
+
+      it '空白を各カラムの文字列内に含むcsv文字列がトリムされない状態で保存されること' do
+        target.topics = "ho ge,f oo,ba r"
+        target.save
+        expect(target.topics).to eq "ho ge,f oo,ba r"
+      end
+    end
   end
 end
