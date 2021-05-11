@@ -39,7 +39,7 @@ class ArticlesController < ApplicationController
     article.published = params[:published]
 
     if article.save
-      head :no_content
+      render json: article, status: :ok
     else
       render json: article.errors, status: :bad_request
     end

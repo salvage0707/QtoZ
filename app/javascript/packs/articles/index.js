@@ -63,6 +63,10 @@ const UpdateModal = {
     this.$form.data("id", id);
   },
 
+  reset: function() {
+    this.setId(null);
+  },
+
   setValueAtSlag: function(value) {
     this.$modal.find("#slag-input-area").val(value);
   },
@@ -112,14 +116,16 @@ const UpdateModal = {
       scriptCharset: 'utf-8',
       data:          JSON.stringify(data)
     })
-    .done(function() {
+    .done(function(response) {
       const articleTr = new ArticleTr(id);
-      articleTr.setSlag(data["slag"]);
-      articleTr.setTitle(data["title"]);
-      articleTr.setEmoji(data["emoji"]);
-      articleTr.setType(data["type"]);
-      articleTr.setTopics(data["topics"]);
-      articleTr.setPublished(data["published"]);
+      articleTr.setSlag(response["slag"]);
+      articleTr.setTitle(response["title"]);
+      articleTr.setEmoji(response["emoji"]);
+      articleTr.setType(response["type"]);
+      articleTr.setTopics(response["topics"]);
+      articleTr.setPublished(response["published"]);
+
+      self.reset();
       self.hide();
     })
     .fail(function(response) {
