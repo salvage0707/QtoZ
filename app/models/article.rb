@@ -18,17 +18,18 @@ class Article < ApplicationRecord
 
   MAX_IMPORT = 100
 
-  before_save do
+  before_validation do
     # topicsの不要な空白を削除する
     striped_topics = self.topics.split(",").map { |v| v.strip}
     self.topics = striped_topics.join(",")
+    
+    # 絵文字が設定されていない場合、ランダムな絵文字を設定する
+    if self.emoji.blank?
+      self.emoji = Emoji.random_emoji_unicode()
+    end
   end
 
   def self.import_from_qiita_response(user, emoji, response)
-    if emoji.blank?
-      emoji = Emoji.random_emoji_unicode()
-    end
-
     article = Article.new
     article.title    = response["title"]
     article.slag     = response["id"]

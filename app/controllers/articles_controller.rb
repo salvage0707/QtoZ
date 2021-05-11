@@ -26,7 +26,7 @@ class ArticlesController < ApplicationController
       redirect_to action: :new 
     end
 
-    @articles = current_user.articles
+    @articles = current_user.articles.order(qiita_created_at: :desc)
   end
 
   def update

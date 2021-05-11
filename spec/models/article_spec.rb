@@ -93,9 +93,9 @@ RSpec.describe Article, type: :model do
     end
 
     describe '絵文字(emoji)' do
-      it '空の値が無効であること' do
+      it '空の値が有効であること（バリデーション前に絵文字が設定されるため）' do
         target.emoji = nil
-        expect(target).to_not be_valid
+        expect(target).to be_valid
       end
     end
 
@@ -237,32 +237,46 @@ RSpec.describe Article, type: :model do
     end
   end
 
-  describe 'save前処理' do
+  describe 'バリデーション前処理' do
     let(:target) { build(:article, user: create(:user)) }
 
     describe 'topicsのトリム処理' do
       it '空白を含まないcsv文字列がそのままの状態で保存されること' do
         target.topics = "hoge,foo,bar"
-        target.save
+        target.valid?
         expect(target.topics).to eq "hoge,foo,bar"
       end
 
       it '空白を各カラムの前後に含むcsv文字列がトリムされた状態で保存されること' do
         target.topics = " hoge , foo , bar "
-        target.save
+        target.valid?
         expect(target.topics).to eq "hoge,foo,bar"
       end
 
       it '空白を各カラムの前後に複数の空白を含むcsv文字列がトリムされた状態で保存されること' do
         target.topics = "  hoge  ,  foo  ,  bar  "
-        target.save
+        target.valid?
         expect(target.topics).to eq "hoge,foo,bar"
       end
 
       it '空白を各カラムの文字列内に含むcsv文字列がトリムされない状態で保存されること' do
         target.topics = "ho ge,f oo,ba r"
-        target.save
+        target.valid?
         expect(target.topics).to eq "ho ge,f oo,ba r"
+      end
+    end
+
+    describe 'emojiのランダム設定' do
+      it '値がある場合、変更されないこと' do
+        target.emoji = "✊"
+        target.valid?
+        expect(target.emoji).to eq "✊"
+      end
+
+      it '空の場合にランダムな絵文字が設定されること' do
+        target.emoji = nil
+        target.valid?
+        expect(target.emoji).to_not be_blank
       end
     end
   end
