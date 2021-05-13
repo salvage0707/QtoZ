@@ -76,8 +76,9 @@ class Article < ApplicationRecord
   private
 
     def self.zenn_article_format(article)
+      topics_array = article.topics.split(",")
       # hoge -> "hoge"にする
-      topics = article.topics.map { |v| '"'+v+'"' }
+      topics = topics_array.map { |v| '"'+v+'"' }.join(",")
       template = <<~"EOS"
           ---
           title: "#{article.title}" 
