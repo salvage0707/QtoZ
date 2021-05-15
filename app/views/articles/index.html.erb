@@ -104,7 +104,6 @@
   <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
     <div class="hidden-delete-modal fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
 
-    <!-- This element is to trick the browser into centering the modal contents. -->
     <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
     <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
@@ -151,6 +150,12 @@
 
     <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
       <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+
+        <!-- head messages -->
+        <div id="system-error-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <span class="block sm:inline">更新に失敗しました。再度送信してください。</span>
+        </div>
+
         <form id="update-form">
 
           <div class="mt-3 text-left self-center">
@@ -160,6 +165,7 @@
                 slag
               </label>
               <input name="slag" id="slag-input-area" class="mt-1 shadow text-xl appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text">
+              <ul id="slag-input-errors" class="mt-1 ml-2 list-disc text-sm text text-red-500 list-inside"></ul>
             </div>
 
             <!-- title -->
@@ -168,6 +174,7 @@
                 title
               </label>
               <input name="title" id="title-input-area" class="mt-1 shadow text-xl appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text">
+              <ul id="title-input-errors" class="mt-1 ml-2 list-disc text-sm text text-red-500 list-inside"></ul>
             </div>
 
             <!-- emoji -->
@@ -176,6 +183,7 @@
                 emoji
               </label>
               <input name="emoji" id="emoji-input-area" class="mt-1 shadow text-xl align-last-center appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text">
+              <ul id="emoji-input-errors" class="mt-1 ml-2 list-disc text-sm text text-red-500 list-inside"></ul>
             </div>
 
             <!-- type -->
@@ -187,6 +195,7 @@
                 <option value="tech">tech</option>
                 <option value="idea">idea</option>
               </select>
+              <ul id="type-input-errors" class="mt-1 ml-2 list-disc text-sm text text-red-500 list-inside"></ul>
             </div>
 
             <!-- topics -->
@@ -195,6 +204,7 @@
                 topics
               </label>
               <input name="topics" id="topics-input-area" class="mt-1 shadow text-xl appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text">
+              <ul id="topics-input-errors" class="mt-1 ml-2 list-disc text-sm text text-red-500 list-inside"></ul>
             </div>
 
             <!-- published -->
@@ -206,10 +216,12 @@
                 <option value="true">true</option>
                 <option value="false">false</option>
               </select>
+              <ul id="published-input-errors" class="mt-1 ml-2 list-disc text-sm text text-red-500 list-inside"></ul>
             </div>
           </div>
         </form>
       </div>
+
       <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
         <button class="update-button w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
           更新

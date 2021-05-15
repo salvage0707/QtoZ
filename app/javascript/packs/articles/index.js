@@ -63,10 +63,6 @@ const UpdateModal = {
     this.$form.data("id", id);
   },
 
-  reset: function() {
-    this.setId(null);
-  },
-
   setValueAtSlag: function(value) {
     this.$modal.find("#slag-input-area").val(value);
   },
@@ -91,6 +87,36 @@ const UpdateModal = {
     this.$modal.find("#published-input-area").val(value);
   },
 
+  resetId: function() {
+    this.setId(null);
+  },
+
+  resetAll: function() {
+    // システムエラーの非表示
+    this.$modal.find("#system-error-message").hide();
+    
+    // バリデーションエラーの削除
+    this.$modal.find(`#slag-input-errors`).empty();
+    this.$modal.find(`#title-input-errors`).empty();
+    this.$modal.find(`#emoji-input-errors`).empty();
+    this.$modal.find(`#type-input-errors`).empty();
+    this.$modal.find(`#topics-input-errors`).empty();
+    this.$modal.find(`#published-input-errors`).empty();
+  },
+
+  showSystemErrorMessage: function() {
+    this.$modal.find("#system-error-message").show();
+  },
+
+  setErrors: function(name, errorMessages) {
+    const $errorList = this.$modal.find(`#${name}-input-errors`);
+
+    // エラーメッセージを設定
+    errorMessages.forEach((message) => {
+      $errorList.append(`<li>${name}${message}</li>`)
+    });
+  },
+
   update: function() {
     // URL
     const id = this.$form.data("id");
@@ -107,6 +133,7 @@ const UpdateModal = {
     const serialized = this.$form.serializeArray();
     const data = parseJson(serialized);
 
+    // 更新処理
     self = this;
     $.ajax({
       url:           url,
@@ -125,11 +152,25 @@ const UpdateModal = {
       articleTr.setTopics(response["topics"]);
       articleTr.setPublished(response["published"]);
 
-      self.reset();
+      self.resetId();
       self.hide();
     })
     .fail(function(response) {
-      console.error(response);
+      const status = response.status;
+      const responseBody = response.responseJSON;
+
+      // バリデーションエラー
+      if (status == 400) {
+        self.resetAll();
+
+        for (let [key, value] of Object.entries(responseBody)) {
+          self.setErrors(key, value);
+        }
+
+      } else {
+        // システムエラー
+        self.showSystemErrorMessage();
+      }
     });
   }
 }
@@ -262,6 +303,7 @@ $(".show-update-modal").click(function(event) {
   const published = articleTr.getPublished();
 
   if (UpdateModal.getId() != id) {
+    UpdateModal.resetAll();
     UpdateModal.setId(id);
     UpdateModal.setValueAtSlag(slag);
     UpdateModal.setValueAtTitle(title);
