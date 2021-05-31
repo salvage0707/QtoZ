@@ -1,4 +1,6 @@
-<%= javascript_pack_tag 'application/header' %>
+<%= content_for :scripts do %>
+  <%= javascript_pack_tag 'application/header' %>
+<% end %>
 
 <nav class="bg-gray-800 text-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -91,9 +93,15 @@
                       <p>新規登録は不要です！</p>
 
                       <!--Footer-->
-                      <div class="flex justify-end pt-2">
+                      <div class="flex justify-center pt-2 mt-5">
                         <%= link_to 'Login with Qiita', user_qiita_omniauth_authorize_path, method: :post, class: "px-4 bg-transparent p-3 rounded-lg text-white bg-qiita-green hover:bg-gray-100 hover:text-indigo-400 mr-2" %>
                       </div>
+
+                      <p class="mt-5 text-sm ">
+                        <%= link_to '利用規約', terms_path, class: "border-b border-gray-800" %>、
+                        <%= link_to 'プライバシーポリシー', terms_path, class: "border-b border-gray-800" %>
+                        に同意したうえでログインしてください。
+                      </p>
                       
                     </div>
                   </div>

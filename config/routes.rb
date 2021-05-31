@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
   root to: 'home#index'
 
+  # 利用規約
+  get 'terms', to: "home#terms"
+  
+  # プライバシーポリシー
+  get 'privacy', to: "home#privacy"
+
   devise_for :users, skip: [:registration, :session, :password], controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   devise_scope :user do
     get    '/users/sign_in',  to: 'devise/sessions#new',     as: :new_user_session

@@ -1,6 +1,7 @@
 import '../../css/application/header.css'
 
-$(() => {
+$(function() {
+  console.log("ヘッダーのクリック")
   // ヘッダーのユーザーメニュー切り替え
   $('#user-menu-button').on('click', () => {
     $('#user-menu').toggleClass('hidden');
