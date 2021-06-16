@@ -62,76 +62,43 @@
               </div>
             <% else %>
               <div class="ml-3 inline-flex rounded-md shadow">
-                <%= link_to 'ログイン', new_user_session_path, class: 'sign-in-modal-button ml-3 px-3 py-2 rounded-md text-sm font-medium text-indigo-600 bg-white hover:bg-indigo-50' %>
-
-                <!--Modal-->
-                <div class="sign-in-modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
-                  <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-                  
-                  <div class="modal-container bg-white text-gray-800 w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
-                    
-                    <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
-                      <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-                        <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
-                      </svg>
-                    </div>
-
-                    <!-- Add margin if you want to see some of the overlay behind the modal-->
-                    <div class="modal-content py-4 text-left px-6">
-                      <!--Title-->
-                      <div class="flex justify-between text-center items-center pb-3">
-                        <p class="text-2xl font-bold text-center">QtoZ</p>
-                        <div class="modal-close cursor-pointer z-50">
-                          <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-                            <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
-                          </svg>
-                        </div>
-                      </div>
-
-                      <!--Body-->
-                      <p>Qiitaアカウントがあればログインできます。</p>
-                      <p>新規登録は不要です！</p>
-
-                      <!--Footer-->
-                      <div class="flex justify-center pt-2 mt-5">
-                        <%= link_to 'Login with Qiita', user_qiita_omniauth_authorize_path, method: :post, class: "px-4 bg-transparent p-3 rounded-lg text-white bg-qiita-green hover:bg-gray-100 hover:text-indigo-400 mr-2" %>
-                      </div>
-
-                      <p class="mt-5 text-sm ">
-                        <%= link_to '利用規約', terms_path, class: "border-b border-gray-800" %>、
-                        <%= link_to 'プライバシーポリシー', terms_path, class: "border-b border-gray-800" %>
-                        に同意したうえでログインしてください。
-                      </p>
-                      
-                    </div>
-                  </div>
-                </div>
+                <button class="sign-in-modal-button ml-3 px-3 py-2 rounded-md text-sm font-medium text-indigo-600 bg-white hover:bg-indigo-50"> ログイン</button>
               </div>
             <% end %>
           </div>
         </div>
       </div>
       <div class="-mr-2 flex md:hidden">
-        <!-- Mobile menu button -->
-        <button type="button" class="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
-          <span class="sr-only">Open main menu</span>
-          <!--
-            Heroicon name: outline/menu
+        <div class="ml-3 relative">
+          <% if user_signed_in?%>
+            <div>
+              <button 
+                type="button" 
+                class="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                id="user-menu-button" 
+                aria-expanded="false" 
+                aria-haspopup="true"
+              >
+                <span class="sr-only">Open user menu</span>
+                <img class="h-8 w-8 rounded-full" src="<%= current_user.image %>" alt="">
+              </button>
+            </div>
 
-            Menu open: "hidden", Menu closed: "block"
-          -->
-          <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-          <!--
-            Heroicon name: outline/x
-
-            Menu open: "block", Menu closed: "hidden"
-          -->
-          <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
+            <div
+              id="user-menu"
+              class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" 
+              role="menu" 
+              aria-orientation="vertical" 
+              aria-labelledby="user-menu"
+            >
+              <%= link_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100' %>
+            </div>
+          <% else %>
+            <div class="ml-3 inline-flex rounded-md shadow">
+              <button class="sign-in-modal-button ml-3 px-3 py-2 rounded-md text-sm font-medium text-indigo-600 bg-white hover:bg-indigo-50"> ログイン</button>
+            </div>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
@@ -140,43 +107,75 @@
   <div class="md:hidden" id="mobile-menu">
     <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
       <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-      <a href="#" class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+      <% if user_signed_in? %>
+        <div class="">
+          <div class="ml-10 flex items-baseline space-x-4">
+            <!-- クラス名を定義 -->
+            <% selected_class = "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" %>
+            <% not_selected_class = "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
 
-      <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Team</a>
+            <!-- 記事のインポート -->
+            <% link_class_name = selected_path(new_article_path, selected_class, not_selected_class)  %>
+            <%= link_to 'インポート', new_article_path, class: link_class_name %>
 
-      <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Projects</a>
+            <!-- 記事設定 -->
+            <% link_class_name = selected_path(articles_path, selected_class, not_selected_class)  %>
+            <%= link_to '記事設定', articles_path, class: link_class_name %>
 
-      <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Calendar</a>
+            <!-- ダウンロード -->
+            <% link_class_name = selected_path(zip_jobs_path, selected_class, not_selected_class)  %>
+            <%= link_to 'ダウンロード', zip_jobs_path, class: link_class_name %>
 
-      <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Reports</a>
-    </div>
-    <div class="pt-4 pb-3 border-t border-gray-700">
-      <div class="flex items-center px-5">
-        <div class="flex-shrink-0">
-          <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+          </div>
         </div>
-        <div class="ml-3">
-          <div class="text-base font-medium leading-none text-white">Tom Cook</div>
-          <div class="text-sm font-medium leading-none text-gray-400">tom@example.com</div>
-        </div>
-        <button class="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-          <span class="sr-only">View notifications</span>
-          <!-- Heroicon name: outline/bell -->
-          <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-          </svg>
-        </button>
-      </div>
-      <div class="mt-3 px-2 space-y-1">
-        <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">Your Profile</a>
-
-        <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">Settings</a>
-
-        <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">Sign out</a>
-      </div>
+      <% end %>
     </div>
   </div>
 </nav>
+
+<!--Modal-->
+<div class="sign-in-modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
+  <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+  
+  <div class="modal-container bg-white text-gray-800 w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+    
+    <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
+      <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+        <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+      </svg>
+    </div>
+
+    <!-- Add margin if you want to see some of the overlay behind the modal-->
+    <div class="modal-content py-4 text-left px-6">
+      <!--Title-->
+      <div class="flex justify-between text-center items-center pb-3">
+        <p class="text-2xl font-bold text-center">QtoZ</p>
+        <div class="modal-close cursor-pointer z-50">
+          <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+            <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+          </svg>
+        </div>
+      </div>
+
+      <!--Body-->
+      <p>Qiitaアカウントがあればログインできます。</p>
+      <p>新規登録は不要です！</p>
+
+      <!--Footer-->
+      <div class="flex justify-center pt-2 mt-5">
+        <%= link_to 'Login with Qiita', user_qiita_omniauth_authorize_path, method: :post, class: "px-4 bg-transparent p-3 rounded-lg text-white bg-qiita-green hover:bg-gray-100 hover:text-indigo-400 mr-2" %>
+      </div>
+
+      <p class="mt-5 text-sm ">
+        <%= link_to '利用規約', terms_path, class: "border-b border-gray-800" %>、
+        <%= link_to 'プライバシーポリシー', terms_path, class: "border-b border-gray-800" %>
+        に同意したうえでログインしてください。
+      </p>
+      
+    </div>
+  </div>
+</div>
+</div>
 
 <header class="bg-white shadow">
   <% if content_for?(:content_title) %>
