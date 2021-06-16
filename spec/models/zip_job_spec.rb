@@ -41,9 +41,9 @@ RSpec.describe ZipJob, type: :model do
     end
 
     describe 'ダウンロードurl(url)' do
-      it '空の値が無効であること' do
+      it '空の値が有効であること' do
         target.url = nil
-        expect(target).to_not be_valid
+        expect(target).to be_valid
       end
     end
   end

@@ -3,7 +3,6 @@ class ZipJob < ApplicationRecord
 
   validates :status, presence: true, 
                      inclusion: { in: %w(実行中 完了 失敗)}
-  validates :url,    presence: true
 
   RUNNITG = "実行中"
   SUCCESS = "完了"
