@@ -61,7 +61,6 @@ class ArticlesController < ApplicationController
 
       Thread.new(user, default_emoji, job) do |user, default_emoji, job|
         ActiveRecord::Base.transaction do
-          articles = []
           client = Qiita::Client.new(access_token: user.access_token)
 
           # ユーザーデータから投稿数を取得

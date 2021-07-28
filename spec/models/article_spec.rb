@@ -80,7 +80,6 @@ RSpec.describe Article, type: :model do
 
       context "一意性チェック" do
         it "重複しない値が有効であること" do
-          other = create(:article)
           expect(target).to be_valid
         end
 

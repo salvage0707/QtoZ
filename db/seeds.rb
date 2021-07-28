@@ -19,5 +19,16 @@ data_hash.each do |data|
   tags = tag_names.join(",")
   isPrivate = data["private"]
   created_at = data["created_at"]
-  Article.create!(title: title, slag: qiita_uid, emoji: "✊", category: "tech", topics: tags, qiita_uid: qiita_uid, qiita_url: url, qiita_created_at: created_at, user_id: 1)
+  Article.create!(
+    title: title,
+    slag: qiita_uid,
+    emoji: "✊",
+    category: "tech",
+    topics: tags,
+    published: isPrivate,
+    qiita_uid: qiita_uid,
+    qiita_url: url,
+    qiita_created_at: created_at,
+    user_id: 1,
+  )
 end

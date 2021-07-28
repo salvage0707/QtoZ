@@ -13,7 +13,6 @@ RSpec.describe User, type: :model do
       end
 
       it "重複が無効であること" do
-        other_user = create(:user, username: target.username)
         expect(target).to_not be_valid
       end
     end
