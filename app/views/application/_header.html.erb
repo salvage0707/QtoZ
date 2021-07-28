@@ -41,7 +41,7 @@
               <div>
                 <button 
                   type="button" 
-                  class="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                  class="user-menu-button max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                   id="user-menu-button" 
                   aria-expanded="false" 
                   aria-haspopup="true"
@@ -52,8 +52,7 @@
               </div>
 
               <div
-                id="user-menu"
-                class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" 
+                class="user-menu hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" 
                 role="menu" 
                 aria-orientation="vertical" 
                 aria-labelledby="user-menu"
@@ -68,13 +67,15 @@
           </div>
         </div>
       </div>
+
+      
       <div class="-mr-2 flex md:hidden">
         <div class="ml-3 relative">
           <% if user_signed_in?%>
             <div>
               <button 
                 type="button" 
-                class="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                class="user-menu-button max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                 id="user-menu-button" 
                 aria-expanded="false" 
                 aria-haspopup="true"
@@ -85,8 +86,7 @@
             </div>
 
             <div
-              id="user-menu"
-              class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" 
+              class="user-menu hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" 
               role="menu" 
               aria-orientation="vertical" 
               aria-labelledby="user-menu"
@@ -109,7 +109,7 @@
       <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
       <% if user_signed_in? %>
         <div class="">
-          <div class="ml-10 flex items-baseline space-x-4">
+          <div class="ml-10 flex justify-center items-baseline space-x-4">
             <!-- クラス名を定義 -->
             <% selected_class = "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" %>
             <% not_selected_class = "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>

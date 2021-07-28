@@ -46,7 +46,11 @@ gem 'appengine'
 
 gem 'rails-i18n'
 
-gem "twemoji"
+gem 'twemoji'
+
+gem 'rubocop', require: false
+gem 'rubocop-performance', require: false
+gem 'rubocop-rails', require: false
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
