@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ZipController < ApplicationController
   before_action :authenticate_user!
 
@@ -11,35 +13,33 @@ class ZipController < ApplicationController
     job.save
 
     Thread.new(current_user, job) do |user, job|
-      begin
-        # ユーザーのバケットオブジェクト削除
-        Article.delete_storage(user)
+      # ユーザーのバケットオブジェクト削除
+      Article.delete_storage(user)
 
-        # バケットにzenn形式記事をアップロード
-        Article.export_storage(user)
+      # バケットにzenn形式記事をアップロード
+      Article.export_storage(user)
 
-        # URLを設定
-        url = ENV['GCF_ZIP_URL']
-        data = { 
-          input_path: Article.bucket_path(user), 
-          filename: user.username 
-        }
-        response = Faraday.post(url, data.to_json(), "Content-Type" => "application/json")
+      # URLを設定
+      url = ENV["GCF_ZIP_URL"]
+      data = {
+        input_path: Article.bucket_path(user),
+        filename: user.username
+      }
+      response = Faraday.post(url, data.to_json(), "Content-Type" => "application/json")
 
-        if response.status == 200
-          body = JSON.parse(response.body)
-          job.url = body["public_url"]
-          job.success
-        else
-          job.faild
-        end
-
-        job.save
-      rescue => exception
+      if response.status == 200
+        body = JSON.parse(response.body)
+        job.url = body["public_url"]
+        job.success
+      else
         job.faild
-        job.save
-        raise exception
       end
+
+      job.save
+    rescue => exception
+      job.faild
+      job.save
+      raise exception
     end
 
     redirect_to action: :index

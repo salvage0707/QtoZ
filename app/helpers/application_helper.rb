@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   def selected_path(path, t, f)
     request.path == path ? t : f
@@ -5,10 +7,10 @@ module ApplicationHelper
 
   def flash_name_to_coler_name(flash_name)
     case flash_name
-    when 'notice' then
-      return 'blue'
-    when 'alert' then
-      return 'red'
+    when "notice" then
+      "blue"
+    when "alert" then
+      "red"
     end
   end
 end

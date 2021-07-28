@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "boot"
 
 require "rails/all"
@@ -22,7 +24,7 @@ module QtoZ
     # config.eager_load_paths << Rails.root.join("extras")
 
     # タイムゾーン設定
-    config.time_zone = 'Asia/Tokyo'
+    config.time_zone = "Asia/Tokyo"
     config.active_record.default_timezone = :local
   end
 end

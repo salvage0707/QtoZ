@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 class Article < ApplicationRecord
   belongs_to :user
 
   validates :title, presence: true
   validates :emoji, presence: true
-  validates :slag,  presence: true, 
+  validates :slag,  presence: true,
                     format: { with: /\A[a-z0-9¥-]+\z/, message: 'は"a-z0-9"と"-"の組み合わせで入力してください' },
                     length: { in: 12..50 },
                     uniqueness: { scope: :user_id  }
   validates :category,  presence: true,
-                        inclusion: { in: %w(tech idea)}
+                        inclusion: { in: %w(tech idea) }
   validates :topics,    presence: true
   validates :published, inclusion: { in: [true, false] }
   validates :qiita_uid, presence: true
@@ -20,9 +22,9 @@ class Article < ApplicationRecord
 
   before_validation do
     # topicsの不要な空白を削除する
-    striped_topics = self.topics.split(",").map { |v| v.strip}
+    striped_topics = self.topics.split(",").map { |v| v.strip }
     self.topics = striped_topics.join(",")
-    
+
     # 絵文字が設定されていない場合、ランダムな絵文字を設定する
     if self.emoji.blank?
       self.emoji = Emoji.random_emoji_unicode()
@@ -49,9 +51,9 @@ class Article < ApplicationRecord
 
   def self.export_storage(user)
     client = Storage::Client.create
-    
+
     ids = Article.where(user_id: user.id).pluck(:id)
-    
+
     ids.each do |id|
       article = Article.find(id)
       prefix = bucket_path(user)
@@ -64,32 +66,30 @@ class Article < ApplicationRecord
     client = Storage::Client.create
     file_name = bucket_path(user)
     files = client.files(prefix: file_name)
-    files.each do |f| 
+    files.each do |f|
       f.delete
     end
   end
 
   def self.bucket_path(user)
-    return "#{user.username}/article"
+    "#{user.username}/article"
   end
 
   private
-
     def self.zenn_article_format(article)
       topics_array = article.topics.split(",")
       # hoge -> "hoge"にする
-      topics = topics_array.map { |v| '"'+v+'"' }.join(",")
+      topics = topics_array.map { |v| '"' + v + '"' }.join(",")
       template = <<~"EOS"
           ---
-          title: "#{article.title}" 
+          title: "#{article.title}"#{' '}
           emoji: "#{article.emoji}"
-          type: "#{article.category}" 
+          type: "#{article.category}"#{' '}
           topics: [#{topics}]
           published: #{article.published}
           ---
           #{article.body}
-        EOS
-      return template
+      EOS
+      template
     end
-
 end

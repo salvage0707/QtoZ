@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 require "google/cloud/storage"
- 
+
 module Storage
   class Client
     def self.create
@@ -9,8 +11,8 @@ module Storage
       else
         storage = Google::Cloud::Storage.new()
       end
-      
-      return storage.bucket Settings.storage.bucket
+
+      storage.bucket Settings.storage.bucket
     end
   end
 end

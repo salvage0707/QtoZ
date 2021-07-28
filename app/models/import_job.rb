@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class ImportJob < ApplicationRecord
   belongs_to :user
 
-  validates :status, presence: true, 
-                     inclusion: { in: %w(実行中 完了 失敗)}
+  validates :status, presence: true,
+                     inclusion: { in: %w(実行中 完了 失敗) }
 
   scope :latest, -> (user_id) { where(user_id: user_id).order(id: :desc).first }
 
@@ -23,11 +25,11 @@ class ImportJob < ApplicationRecord
   end
 
   def isRunning?
-    return self.status == RUNNITG
+    self.status == RUNNITG
   end
 
   def isSuccess?
-    return self.status == SUCCESS
+    self.status == SUCCESS
   end
 
   def isFaild?
