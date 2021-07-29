@@ -87,7 +87,7 @@ production:
   <<: *default
   pool: 5
   timeout: 5000
-  username: <%= ENV["DB_USER"] %>
-  password: <%= ENV["DB_PASS"] %>
-  database: <%= ENV["DB_NAME"] %>
-  host:  "<%= ENV.fetch("DB_SOCKET_DIR") { '/cloudsql' } %>/<%= ENV["INSTANCE_CONNECTION_NAME"] %>"
+  username: <%= Rails.application.credentials.database[:username] %>
+  password: <%= Rails.application.credentials.database[:password] %>
+  database: <%= Rails.application.credentials.database[:dbname] %>
+  host:  "<%= Rails.application.credentials.database[:instance_connection_name] %>"
