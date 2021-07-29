@@ -20,7 +20,7 @@ class ZipController < ApplicationController
       Article.export_storage(user)
 
       # URLを設定
-      url = ENV["GCF_ZIP_URL"]
+      url = Settings.gcp.cloud_functions.zenn_zip.url
       data = {
         input_path: Article.bucket_path(user),
         filename: user.username
