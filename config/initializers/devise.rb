@@ -273,7 +273,7 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   config.omniauth :qiita,
-                  Rails.application.credentials.qiita_api[:clinet_id],
+                  Rails.application.credentials.qiita_api[:client_id],
                   Rails.application.credentials.qiita_api[:client_secret],
                   scope: "read_qiita"
 
