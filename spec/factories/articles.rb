@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :article do
     title                { "titleですよ！" }
     sequence(:slag)      { |n| "2e79a1abe7cd8214ceb#{n}" }
     emoji                { "✊" }
     category             { "tech" }
-    topics               { 'hoge, foo, bar' }
+    topics               { "hoge, foo, bar" }
     published            { true }
     sequence(:qiita_uid) { |n| "8ded79359c450dd30r0#{n}" }
     qiita_url            { "https://qiita.com/manbolila/items/8ded79359c450dd30e06" }

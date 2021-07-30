@@ -1,0 +1,8 @@
+gcp:
+  cloud_functions:
+    zenn_zip:
+      url: https://asia-northeast1-qtoz-308113.cloudfunctions.net/zenn_zip
+  cloud_storage:
+    article_files:
+      bucket_name: example-storage-97294
+      keyfile: tmp/keys/service-acount.json

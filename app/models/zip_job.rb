@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 class ZipJob < ApplicationRecord
   belongs_to :user
 
-  validates :status, presence: true, 
-                     inclusion: { in: %w(実行中 完了 失敗)}
-  validates :url,    presence: true
+  validates :status, presence: true,
+                     inclusion: { in: %w(実行中 完了 失敗) }
 
   RUNNITG = "実行中"
   SUCCESS = "完了"
@@ -22,11 +23,11 @@ class ZipJob < ApplicationRecord
   end
 
   def isRunning?
-    return self.status == RUNNITG
+    self.status == RUNNITG
   end
 
   def isSuccess?
-    return self.status == SUCCESS
+    self.status == SUCCESS
   end
 
   def isFaild?
