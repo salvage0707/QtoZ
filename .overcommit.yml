@@ -24,3 +24,7 @@ PrePush:
   Brakeman:
     enabled: true
     on_warn: true
+
+CommitMsg:
+  CapitalizedSubject:
+    enabled: false
