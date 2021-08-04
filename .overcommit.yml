@@ -24,6 +24,9 @@ PrePush:
   Brakeman:
     enabled: true
     on_warn: true
+  RSpec:
+    enabled: true
+    on_warn: true
 
 CommitMsg:
   CapitalizedSubject:
