@@ -18,8 +18,6 @@ class Article < ApplicationRecord
   validates :qiita_created_at, presence: true
   validates :user_id,          presence: true
 
-  MAX_IMPORT = 100
-
   before_validation do
     # topicsの不要な空白を削除する
     striped_topics = self.topics.split(",").map { |v| v.strip }

@@ -16,7 +16,12 @@ class ArticlesController < ApplicationController
     end
 
     # レスポンスを早くするため非同期でインポート処理
-    async_import_qiita_articles(current_user, params[:emoji])
+    # async_import_qiita_articles(current_user, params[:emoji])
+    job = ImportJob.create(
+      user: current_user,
+      status: :wait
+    )
+    ApplicationJob.perform_later(current_user.id, job.id, params[:emoji])
 
     redirect_to action: :new
   end
@@ -52,45 +57,4 @@ class ArticlesController < ApplicationController
     article.destroy
     redirect_to articles_path
   end
-
-  private
-    def async_import_qiita_articles(user, default_emoji)
-      job = ImportJob.new(user: user)
-      job.status = :wait
-      job.save!
-
-      Thread.new(user, default_emoji, job) do |user, default_emoji, job|
-        job.status = :running
-        job.save!
-
-        ActiveRecord::Base.transaction do
-          client = Qiita::Client.new(access_token: user.access_token)
-
-          # ユーザーデータから投稿数を取得
-          user_data_response = client.get_authenticated_user()
-          items_count = user_data_response.body["items_count"]
-          # 投稿数が本サービスの上限を超えているか判定
-          import_item_count = (items_count > Article::MAX_IMPORT) ? Article::MAX_IMPORT : items_count
-          # インポート数からページ数を取得
-          max_page = (import_item_count.to_f / 20).ceil
-
-          # 1ページ目から取得
-          (1..max_page).each do |page|
-            params = { page: page }
-            response = client.list_authenticated_user_items(params)
-            response.body.each do |data|
-              Article.import_from_qiita_response(user, default_emoji, data)
-            end
-          end
-        end
-
-        job.status = :success
-        job.save!
-
-      rescue => e
-        job.status = :faild
-        job.save!
-        raise e
-      end
-    end
 end

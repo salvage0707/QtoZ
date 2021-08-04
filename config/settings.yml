@@ -6,3 +6,7 @@ gcp:
     article_files:
       bucket_name: example-storage-97294
       keyfile: tmp/keys/service-acount.json
+
+qiita_api:
+  import_job:
+    max: 100
