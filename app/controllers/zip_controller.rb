@@ -9,10 +9,13 @@ class ZipController < ApplicationController
 
   def create
     job = ZipJob.new(user_id: current_user.id)
-    job.running
+    job.status = :wait
     job.save
 
     Thread.new(current_user, job) do |user, job|
+      job.status = :running
+      job.save!
+
       # ユーザーのバケットオブジェクト削除
       Article.delete_storage(user)
 
@@ -30,14 +33,14 @@ class ZipController < ApplicationController
       if response.status == 200
         body = JSON.parse(response.body)
         job.url = body["public_url"]
-        job.success
+        job.status = :success
       else
-        job.faild
+        job.status = :faild
       end
 
       job.save
     rescue => exception
-      job.faild
+      job.status = :faild
       job.save
       raise exception
     end

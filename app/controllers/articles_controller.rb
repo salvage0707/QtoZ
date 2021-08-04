@@ -23,7 +23,7 @@ class ArticlesController < ApplicationController
 
   def index
     job = ImportJob.latest(current_user.id)
-    unless job.isSuccess?
+    unless job.success?
       flash[:notice] = "インポート中です。再度記事設定ページにアクセスしてください。"
       redirect_to action: :new
     end
@@ -56,10 +56,13 @@ class ArticlesController < ApplicationController
   private
     def async_import_qiita_articles(user, default_emoji)
       job = ImportJob.new(user: user)
-      job.running
+      job.status = :wait
       job.save!
 
       Thread.new(user, default_emoji, job) do |user, default_emoji, job|
+        job.status = :running
+        job.save!
+
         ActiveRecord::Base.transaction do
           client = Qiita::Client.new(access_token: user.access_token)
 
@@ -81,11 +84,11 @@ class ArticlesController < ApplicationController
           end
         end
 
-        job.success
+        job.status = :success
         job.save!
 
       rescue => e
-        job.faild
+        job.status = :faild
         job.save!
         raise e
       end

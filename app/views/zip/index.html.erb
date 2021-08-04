@@ -27,12 +27,12 @@
                 </td>
 
                 <td class="py-3 px-6 text-center">
-                  <span class="py-1 px-3 rounded-full text-xs"><%= job.status %></span>
+                  <span class="py-1 px-3 rounded-full text-xs"><%= job.status_before_type_cast %></span>
                 </td>
 
                 <td class="py-3 px-6 text-center">
                   <div class="flex item-center justify-center">
-                    <% if job.isSuccess?  %>
+                    <% if job.success?  %>
                       <a class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110" rel="noopener noreferrer" target="_blank" href="<%= job.url %>">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />

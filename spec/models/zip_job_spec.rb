@@ -28,9 +28,10 @@ RSpec.describe ZipJob, type: :model do
           expect(target).to be_valid
         end
 
-        it "許容されない値が無効であること" do
-          target.status = "hoge status"
-          expect(target).to_not be_valid
+        it "許容されない値で例外が発生すること" do
+          expect {
+            target.status = "hoge status"
+          }.to raise_error(ArgumentError)
         end
       end
     end
