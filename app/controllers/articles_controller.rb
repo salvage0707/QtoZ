@@ -16,7 +16,6 @@ class ArticlesController < ApplicationController
     end
 
     # レスポンスを早くするため非同期でインポート処理
-    # async_import_qiita_articles(current_user, params[:emoji])
     job = ImportJob.create(
       user: current_user,
       status: :wait
