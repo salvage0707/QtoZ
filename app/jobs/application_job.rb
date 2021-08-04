@@ -8,19 +8,16 @@ class ApplicationJob < ActiveJob::Base
   around_perform do |job_info, block|
     job = job_record(job_info)
 
-    job.status = :running
-    job.save!
+    job.running!
 
-    block.call
+    begin
+      block.call
+    rescue => exception
+      job.faild!
+      raise exception
+    end
 
-    job.status = :success
-    job.save!
-  end
-
-  discard_on do |job, error|
-    job = job_record(job_info)
-    job.status = :faild
-    job.save!
+    job.success!
   end
 
   def perform(user_id, job_id, emoji)

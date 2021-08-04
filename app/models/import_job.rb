@@ -5,7 +5,7 @@ class ImportJob < ApplicationRecord
 
   validates :status, presence: true
 
-  scope :latest, -> (user_id) { where(user_id: user_id).order(id: :desc).first }
+  scope :latest, -> (user_id) { where(user_id: user_id).last }
 
   enum status: {
     wait: "待機",
